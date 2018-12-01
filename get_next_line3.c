@@ -6,7 +6,7 @@
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 00:37:59 by fberger           #+#    #+#             */
-/*   Updated: 2018/11/22 06:40:28 by fberger          ###   ########.fr       */
+/*   Updated: 2018/12/01 20:01:38 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,46 +15,61 @@
 int	get_next_line(const int fd, char **line)
 {
 	static char	*str = NULL;
-	int		ret;
 	char		*buf;
-	int		i;
+	int			ret;
+	char		*tmp;
+	int			len;
 
-	//printf("1\n");
-	/*if (!str)
-	{
-		if (!(str = (char *)ft_memalloc(2)))
-			return (0);
-		str[0] = 0;
-		str[1] = '\0';
-		}*/
-	if (!line || fd < 0 || BUFF_SIZE < 1)
+	if (!line || fd < 0 || BUF_SIZE < 1)
 		return (0);
-	if (!(buf = (char *)ft_memalloc(BUF_SIZE + 1)))
-	  	return (0);
-	while ((i = read(fd, buf, BUF_SIZE)) > 0)
+	*line = ft_strnew(BUF_SIZE);
+	// si str alors copier coller dans line 
+	if (str)
 	{
-		//printf("2\nbuf=%s\n", buf);
-		if (ft_strchr(buf, '\n'))
+		//printf("inspect str\n");
+		if (ft_strchr(*line, '\n'))
 		{
-		  	if (str)
-			{
-				printf("<join : -%s- et -%s->\n\n", str, buf);
-			  	str = ft_strjoin(str, buf);
-			}
-			else
-			{
-				printf("<dup : -%s->\n\n",  buf);
-				str = ft_strdup(buf);
-			}			
-			*line = str;
+            len = ft_strchr(str, '\n') - str + 1;
+            tmp = ft_strdup(str);
+            free(str);
+            // raccourcir str au besoin
+            *line = ft_strsub(tmp, 0, len);
+            // mettre le solde dans str pour le prochain call
+            str = ft_strsub(tmp, len + 1, ft_strlen(tmp) - len);
+			free(tmp);
+            return (1);
+        }
+	}
+	buf = ft_strnew(BUF_SIZE);
+	while ((ret = read(fd, buf, BUF_SIZE)) >= 1)
+	{
+		// join buf dans line jusqu a \n
+		if (ret < 1)
+			return (ret);
+		// pour terminer la string buf, verifier si reelement besoin
+		buf[ret] = '\0';
+		tmp = ft_strdup(*line);
+		free(*line);
+		*line = ft_strjoin(tmp, buf);
+		free(tmp);
+		// si \n
+		//printf("build str\n");
+		if (ft_strchr(*line, '\n'))
+		{
+			len = ft_strchr(*line, '\n') - *line + 1;
+			tmp = ft_strdup(*line);
+			free(*line);
+			// raccourcir line au besoin
+			*line = ft_strsub(tmp, 0, len);
+			//printf("line = %s\n", *line);
+			// mettre le solde dans str pour le prochain call
+			str = ft_strsub(tmp, len + 1, ft_strlen(tmp) - len);
+			free(tmp);
 			return (1);
 		}
-		if (*str)
-			str = ft_strjoin(str, buf);
-      		else
-      			str = ft_strdup(buf);
 	}
-	//printf("3\n");
+	free(buf);
+	//printf("\nfin\n");
 	return (0);
 }
 /*
