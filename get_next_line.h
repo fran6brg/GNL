@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-# define BUF_SIZE 100
+# define BUF_SIZE 5
 
 int get_next_line(const int fd, char **line);
 

@@ -1,3 +1,6 @@
+
+
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -12,14 +15,19 @@
 
 #include "get_next_line.h"
 
-int main(int argc, char *argv[])
+int	main(int ac, char **av)
 {
-	int		fd;
-	char	**line;
+	char	*line;
+	int	fd;
 
-	(void)argc;
-	line = NULL;
-	fd = open(argv[1], O_RDONLY);
-	get_next_line(fd, line);
-	return (1);
+	(void)ac;
+	fd = open(av[1], O_RDONLY);
+	while (get_next_line(fd, &line) == 1)
+	{
+	  	//printf("--------\nline = -%s-\n--------\n", line);
+	  	//printf("main : -%s-\n\n", line);
+	  	printf("line: %s", line);
+	  	free(line);
+	}
+	return (0);
 }
