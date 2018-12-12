@@ -1,38 +1,32 @@
-
-
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 06:03:39 by fberger           #+#    #+#             */
-/*   Updated: 2018/12/01 19:59:58 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/10 19:32:52 by fberger           #+#    #+#             */
+/*   Updated: 2018/11/17 03:36:03 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rendered/get_next_line.h"
+#include "libft.h"
 
-int	main(int ac, char **av)
+char	*ft_strstr(const char *m, const char *a)
 {
-	char	*line;
-	int	fd;
 	int i;
+	int j;
 
-	(void)ac;
-	fd = open(av[1], O_RDONLY);
-	printf("bufsize = %i\n", BUFF_SIZE);
-	i = 0;
-	while (get_next_line(-1, &line) == 1)
+	i = -1;
+	if (ft_strlen(a) == 0)
+		return ((char *)m);
+	while (m[++i])
 	{
-			i++;
-	  	//printf("--------\nline = -%s-\n--------\n", line);
-	  	printf("\n************************\nmain : -%s-\n************************\n", line);
-	  	//printf("%s", line);
-	  	free(line);
+		j = 0;
+		while (a[j] == m[i + j] && m[i + j])
+			j++;
+		if (a[j] == '\0')
+			return (((char *)m) + i);
 	}
-	printf("\n\ni = %i", i);
 	return (0);
 }

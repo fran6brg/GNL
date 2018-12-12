@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 00:38:17 by fberger           #+#    #+#             */
-/*   Updated: 2018/12/01 20:01:55 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/10 19:06:38 by fberger           #+#    #+#             */
+/*   Updated: 2018/11/13 22:08:00 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+char	*ft_strrchr(const char *s, int c)
+{
+	int		i;
+	char	*sptr;
 
-#include "Libft/libft.h"
-#include <unistd.h>
-#include <fcntl.h>
-
-// 1..* README ok / 1..* test ?
-# define BUFF_SIZE 10
-
-int get_next_line(const int fd, char **line);
-
-#endif
+	i = -1;
+	sptr = (char *)s;
+	while (sptr[++i] != '\0')
+		;
+	if ('\0' == (char)c)
+		return (sptr + i);
+	while (--i >= 0)
+	{
+		if (sptr[i] == (char)c)
+			return (sptr + i);
+	}
+	return ((char *)0);
+}

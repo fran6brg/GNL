@@ -1,25 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 00:38:17 by fberger           #+#    #+#             */
-/*   Updated: 2018/12/01 20:01:55 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/10 20:03:33 by fberger           #+#    #+#             */
+/*   Updated: 2018/11/17 04:04:15 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libft.h"
 
-#include "Libft/libft.h"
-#include <unistd.h>
-#include <fcntl.h>
+char	*ft_strnstr(const char *m, const char *a, size_t n)
+{
+	size_t i;
+	size_t j;
 
-// 1..* README ok / 1..* test ?
-# define BUFF_SIZE 10
-
-int get_next_line(const int fd, char **line);
-
-#endif
+	i = -1;
+	if (ft_strlen(a) == 0)
+		return ((char *)m);
+	while (m[++i] != '\0' && i < n)
+	{
+		j = 0;
+		while (a[j] && a[j] == m[i + j] && (i + j) < n)
+			j++;
+		if (a[j] == '\0')
+			return (((char *)m) + i);
+	}
+	return (NULL);
+}

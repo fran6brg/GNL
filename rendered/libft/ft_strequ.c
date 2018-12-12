@@ -1,38 +1,27 @@
-
-
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strequ.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 06:03:39 by fberger           #+#    #+#             */
-/*   Updated: 2018/12/01 19:59:58 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/11 05:04:25 by fberger           #+#    #+#             */
+/*   Updated: 2018/11/17 06:51:51 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rendered/get_next_line.h"
+#include "libft.h"
 
-int	main(int ac, char **av)
+int		ft_strequ(char const *s1, char const *s2)
 {
-	char	*line;
-	int	fd;
-	int i;
+	int	i;
 
-	(void)ac;
-	fd = open(av[1], O_RDONLY);
-	printf("bufsize = %i\n", BUFF_SIZE);
 	i = 0;
-	while (get_next_line(-1, &line) == 1)
+	if (s1 && s2)
 	{
+		while (s1[i] && s1[i] == s2[i])
 			i++;
-	  	//printf("--------\nline = -%s-\n--------\n", line);
-	  	printf("\n************************\nmain : -%s-\n************************\n", line);
-	  	//printf("%s", line);
-	  	free(line);
+		return ((s1[i] == s2[i]) ? 1 : 0);
 	}
-	printf("\n\ni = %i", i);
 	return (0);
 }

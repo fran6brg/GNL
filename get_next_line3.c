@@ -20,50 +20,71 @@ int	get_next_line(const int fd, char **line)
 	char		*tmp;
 	int			len;
 
-	if (!line || fd < 0 || BUF_SIZE < 1)
+	if (!line || fd < 0 || BUFF_SIZE < 1)
 		return (0);
-	*line = ft_strnew(BUF_SIZE);
-	// si str alors copier coller dans line 
+	*line = ft_strnew(BUFF_SIZE);
+	//i si str alors copier coller dans line
 	if (str)
 	{
-		//printf("inspect str\n");
-		if (ft_strchr(*line, '\n'))
-		{
-            len = ft_strchr(str, '\n') - str + 1;
-            tmp = ft_strdup(str);
-            free(str);
-            // raccourcir str au besoin
-            *line = ft_strsub(tmp, 0, len);
-            // mettre le solde dans str pour le prochain call
-            str = ft_strsub(tmp, len + 1, ft_strlen(tmp) - len);
-			free(tmp);
-            return (1);
-        }
-	}
-	buf = ft_strnew(BUF_SIZE);
-	while ((ret = read(fd, buf, BUF_SIZE)) >= 1)
-	{
-		// join buf dans line jusqu a \n
-		if (ret < 1)
-			return (ret);
-		// pour terminer la string buf, verifier si reelement besoin
-		buf[ret] = '\0';
-		tmp = ft_strdup(*line);
-		free(*line);
-		*line = ft_strjoin(tmp, buf);
-		free(tmp);
-		// si \n
-		//printf("build str\n");
-		if (ft_strchr(*line, '\n'))
-		{
-			len = ft_strchr(*line, '\n') - *line + 1;
+			//printf("2-a : str exist = -%s-\n", str);
+			//printf("inspect str\n");
+			if (ft_strchr(*line, '\n'))
+			{
+							//printf("2-b : newline has been detected\n");
+							//i calculer la distance jusqu'au premier \n
+	            len = ft_strchr(str, '\n') - str;
+							//printf("len = %i\n", len);
+	            tmp = ft_strdup(str);
+	            free(str);
+	            //i raccourcir str au besoin
+	            *line = ft_strsub(tmp, 0, len);
+	            //i mettre le solde dans str pour le prochain call
+	            str = ft_strsub(tmp, len, ft_strlen(tmp) - len);
+							free(tmp);
+	            return (1);
+	    }
 			tmp = ft_strdup(*line);
 			free(*line);
-			// raccourcir line au besoin
+			*line = ft_strjoin(str, tmp);
+			free(tmp);
+	}
+	buf = ft_strnew(BUFF_SIZE);
+	while ((ret = read(fd, buf, BUFF_SIZE)) >= 1 || str)
+	{
+		//printf("1[%i] : buf = -%s-\n || buf = -%i-\n", ret, buf, (int)buf[0]);
+		if (ret == 0)
+		{
+				*line = ft_strdup(str);
+				str = NULL;
+				//printf("break\n");
+				return (1);
+		}
+		if (ret < 0 && !str)
+		{
+				//printf("return %i\n", ret);
+				return (ret);
+		}
+		buf[ret] = '\0';
+		//i pointer sur line pour le join
+		tmp = ft_strdup(*line);
+		free(*line);
+		//i join buf dans line jusqu a \n
+		*line = ft_strjoin(tmp, buf);
+		free(tmp);
+		//i si \n
+		if (ft_strchr(*line, '\n'))
+		{
+			//printf("3 : line contains 1..* newlines\n");
+			len = ft_strchr(*line, '\n') - *line + 1;
+			//printf("\nbuf = -%s- | len = %i\n", buf, len);
+			tmp = ft_strdup(*line);
+			free(*line);
+			//i raccourcir line au besoin
 			*line = ft_strsub(tmp, 0, len);
-			//printf("line = %s\n", *line);
-			// mettre le solde dans str pour le prochain call
-			str = ft_strsub(tmp, len + 1, ft_strlen(tmp) - len);
+			//printf("line = -%s-\n", *line);
+			//i mettre le solde dans str pour le prochain call
+			str = ft_strsub(tmp, len, ft_strlen(tmp) - len);
+			//printf("solde str = -%s-\n", str);
 			free(tmp);
 			return (1);
 		}

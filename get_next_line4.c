@@ -24,6 +24,9 @@ intft_stock2line(char **stock, char **line)
   return (0);
 }
 
+
+
+
 intread_f(char **line, const int fd, char **stock, char *str)
 {
   char*tmp;
@@ -33,7 +36,7 @@ intread_f(char **line, const int fd, char **stock, char *str)
   while ((ret = read(fd, str, BUFF_SIZE)))
     {
       if (ret == -1)
-	return (ret);
+	       return (ret);
       str[ret] = '\0';
       tmp = ft_strdup(line[0]);
       free(line[0]);
@@ -53,23 +56,31 @@ intread_f(char **line, const int fd, char **stock, char *str)
   return (ret);
 }
 
+
+
+
 intget_next_line(const int fd, char **line)
 {
-  intret;
+  int ret;
   static char*stock = NULL;
-  char*str;
+  char *str;
 
   if (line == NULL || fd < 0 || BUFF_SIZE < 1)
     return (-1);
   line[0] = ft_strnew(BUFF_SIZE);
+
   if (stock != NULL)
     if (ft_stock2line(&stock, &line[0]))
       return (1);
+
   str = ft_strnew(BUFF_SIZE);
   if ((ret = read_f(&line[0], fd, &stock, str)) == -1)
     return (-1);
+
   free(str);
+
   if (ret == 0 && ft_strlen(line[0]) == 0)
     return (0);
+
   return (1);
 }
