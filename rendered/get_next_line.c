@@ -12,30 +12,30 @@
 
 #include "get_next_line.h"
 
-static int split_third_param(char **str, char **line, char *to_split)
+static int split_nl(char **str, char **line, char *to_split)
 {
 	int len;
-	char *tmp;
+	//char *tmp;
 
 	len = ft_strchr(to_split, '\n') - to_split + 1;
-	tmp = ft_strdup(to_split);
-	(to_split ? free(to_split) : "");
-	*line = ft_strsub(tmp, 0, len - 1);
-	*str = ft_strsub(tmp, len, ft_strlen(tmp) - len);
-	(tmp ? free(tmp) : "");
+	//tmp = ft_strdup(to_split);
+	//(to_split ? free(to_split) : "");
+	*line = ft_strsub(to_split, 0, len - 1);
+	*str = ft_strsub(to_split, len, ft_strlen(to_split) - len);
+	//(tmp ? free(tmp) : "");
 	return (1);
 }
 
 static int cp_str_in_line(char **str, char **line)
 {
-	char *tmp;
+	//char *tmp;
 
-	if (ft_strchr(*str, '\n') && split_third_param(str, line, *str))
+	if (ft_strchr(*str, '\n') && split_nl(str, line, *str))
 		return (1);
-	tmp = ft_strdup(*line);
-	(*line ? free(*line) : "");
-	*line = ft_strjoin(*str, tmp);
-	(tmp ? free(tmp) : "");
+	//tmp = ft_strdup(*line);
+	//(*line ? free(*line) : "");
+	*line = ft_strjoin(*str, *line);
+	//(tmp ? free(tmp) : "");
 	*str = NULL;
 	return (0);
 }
@@ -43,7 +43,7 @@ static int cp_str_in_line(char **str, char **line)
 static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 {
 	int ret;
-	char *tmp;
+	//char *tmp;
 	char	prev;
 
 	prev = 0;
@@ -62,11 +62,11 @@ static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 		}
 		// join buf à line : ok
 		buf[ret] = '\0';
-		tmp = ft_strdup(*line);
-		(*line ? free(*line) : "");
-		*line = ft_strjoin(tmp, buf);
-		(tmp ? free(tmp) : "");
-		if (ft_strchr(*line, '\n') && split_third_param(str, line, *line)) // splitter si line contient un /n
+		//tmp = ft_strdup(*line);
+		//(*line ? free(*line) : "");
+		*line = ft_strjoin(*line, buf);
+		//(tmp ? free(tmp) : "");
+  	if (ft_strchr(*line, '\n') && split_nl(str, line, *line)) // splitter si line contient un /n
 				return (ret);
 	}
 	if (ret == -1) // ok
@@ -81,20 +81,18 @@ int	get_next_line(const int fd, char **line)
 	static char	*str[10000] = {NULL};
 	char		*buf;
 	int			ret;
-	int		split;
 
 	if (!line || fd < 0 || BUFF_SIZE < 1 || !(*line = ft_strnew(BUFF_SIZE)))
 			return (-1);
-	split = -1; // 0 = str vide | 1 = str pas vide
-	if (str[fd] && (split = cp_str_in_line(&str[fd], line)))
+	if (str[fd] && cp_str_in_line(&str[fd], line))
 		return (1);
 	buf = ft_strnew(BUFF_SIZE);
 	ret = reach_NLorEOF(fd, buf, line, &str[fd]);
+  (buf ? free(buf) : "");
 	if (ret == -1)
 			return (-1);
-	if (ret == 0 && !str[fd] && split == -1)
+	if (ret == 0 && !str[fd])
 			return (ret);
-	(buf ? free(buf) : "");
 	return (1);
 }
 
