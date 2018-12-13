@@ -36,14 +36,14 @@ static int cp_str_in_line(char **str, char **line)
 	//(*line ? free(*line) : "");
 	*line = ft_strjoin(*str, *line);
 	//(tmp ? free(tmp) : "");
-	*str = NULL;
+	//*str = NULL;
+	ft_strdel(str);
 	return (0);
 }
 
 static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 {
 	int ret;
-	//char *tmp;
 	char	prev;
 
 	prev = 0;
@@ -53,24 +53,17 @@ static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 			prev = ret;
 		if (ret == 0) // si EOF, renvoyer 1 une dernière fois si str
 		{
-			if (*str != NULL)
-			{
-				cp_str_in_line(str, line);
-				return (1); // si EOF mais il reste qqchose a retourner
-			}
+			if (*str != NULL && cp_str_in_line(str, line) >= 0)
+					return (1); // si EOF mais il reste qqchose a retourner
 			return (0); // si EOF + il reste rien a retourner
 		}
-		// join buf à line : ok
 		buf[ret] = '\0';
-		//tmp = ft_strdup(*line);
-		//(*line ? free(*line) : "");
 		*line = ft_strjoin(*line, buf);
-		//(tmp ? free(tmp) : "");
   	if (ft_strchr(*line, '\n') && split_nl(str, line, *line)) // splitter si line contient un /n
 				return (ret);
 	}
 	if (ret == -1) // ok
-				return (ret);
+				return (-1);
 	if (ret < prev) // EOF pendant le while
 		return (1);
 	return (0);
@@ -88,27 +81,14 @@ int	get_next_line(const int fd, char **line)
 		return (1);
 	buf = ft_strnew(BUFF_SIZE);
 	ret = reach_NLorEOF(fd, buf, line, &str[fd]);
-  (buf ? free(buf) : "");
+  ft_strdel(&buf);
 	if (ret == -1)
+	{
 			return (-1);
+	}
 	if (ret == 0 && !str[fd])
-			return (ret);
+	{
+			return (0);
+	}
 	return (1);
 }
-
-
-// comment ca fini :
-// reach_NLorEOF return 0 quand lecture est finie + str vide
-// comment ca devrait finir
-// a chaque passage de str a line return 1 jusqu a ce que line soit vide
-
-// static int protect_join(char *src, char *s1)
-// {
-// 	char *tmp;
-//
-// 	tmp = ft_strdup(src);
-// 	(src ? free(src) : "");
-// 	src = ft_strjoin(s1, tmp);
-// 	(tmp ? free(tmp) : "");
-// 	return (1);
-// }

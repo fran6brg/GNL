@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <fcntl.h>
 // 1..* README ok / 1..* test ?
-# define BUFF_SIZE 10
+# define BUFF_SIZE 1000
 
 int get_next_line(const int fd, char **line);
 
