@@ -46,6 +46,7 @@ static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 	char *tmp;
 	char	prev;
 
+	//printf("reach_NLorEOF : str = -%s- | line = -%s- \n", str[fd], *line);
 	prev = 0;
 	while ((ret = read(fd, buf, BUFF_SIZE)) >= 1 || *str)
 	{
@@ -55,9 +56,11 @@ static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 		{
 			if (*str != NULL)
 			{
+				//printf("reach_NLorEOF 1\n");
 				cp_str_in_line(str, line);
 				return (1); // si EOF mais il reste qqchose a retourner
 			}
+			//printf("reach_NLorEOF 2\n");
 			return (0); // si EOF + il reste rien a retourner
 		}
 		// join buf à line : ok
@@ -67,14 +70,25 @@ static int reach_NLorEOF(int fd, char *buf, char **line, char **str)
 		*line = ft_strjoin(tmp, buf);
 		(tmp ? free(tmp) : "");
 		if (ft_strchr(*line, '\n') && split_third_param(str, line, *line)) // splitter si line contient un /n
+		{
+				//printf("reach_NLorEOF 2\n");
 				return (ret);
+		}
 	}
 	if (ret == -1) // ok
 				return (ret);
 	if (ret < prev) // EOF pendant le while
+	{
+		//printf("reach_NLorEOF 3 : fd = %i | str = -%s- | line = -%s- \n", fd, str[fd], *line);
 		return (1);
+	}
+	//printf("reach_NLorEOF 4 : str = -%s- | line = -%s- \n", str[fd], *line);
 	return (0);
 }
+
+
+
+
 
 int	get_next_line(const int fd, char **line)
 {
@@ -83,22 +97,35 @@ int	get_next_line(const int fd, char **line)
 	int			ret;
 	int		split;
 
+	// checkerror
+	//printf("back in this shit : str = -%s- | line = -%s- \n", str[fd], *line);
 	if (!line || fd < 0 || BUFF_SIZE < 1 || !(*line = ft_strnew(BUFF_SIZE)))
+	{
 			return (-1);
+	}
+
 	split = -1; // 0 = str vide | 1 = str pas vide
 	if (str[fd] && (split = cp_str_in_line(&str[fd], line)))
+	{
+		//printf("get_next_line 1\n");
 		return (1);
+	}
+
 	buf = ft_strnew(BUFF_SIZE);
 	ret = reach_NLorEOF(fd, buf, line, &str[fd]);
 	if (ret == -1)
+	{
 			return (-1);
+	}
 	if (ret == 0 && !str[fd] && split == -1)
+	{
+			//printf("get_next_line 2 : str = -%s- | line = -%s- \n", str[fd], *line);
 			return (ret);
+	}
+
 	(buf ? free(buf) : "");
 	return (1);
 }
-
-
 // comment ca fini :
 // reach_NLorEOF return 0 quand lecture est finie + str vide
 // comment ca devrait finir

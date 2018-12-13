@@ -1,6 +1,4 @@
 
-
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -13,7 +11,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "rendered/get_next_line.h"
+#include "get_next_line.h"
 
 int	main(int ac, char **av)
 {
@@ -25,7 +23,7 @@ int	main(int ac, char **av)
 	fd = open(av[1], O_RDONLY);
 	printf("bufsize = %i\n", BUFF_SIZE);
 	i = 0;
-	while (get_next_line(-1, &line) == 1)
+	while (get_next_line(fd, &line) == 1)
 	{
 			i++;
 	  	//printf("--------\nline = -%s-\n--------\n", line);
@@ -36,3 +34,14 @@ int	main(int ac, char **av)
 	printf("\n\ni = %i", i);
 	return (0);
 }
+
+// int		fd;
+// char	*str;
+// int i;
+
+// fd = open("test", O_RDONLY);
+// i = close(fd);
+// printf("i = : %d\n", i);
+// i = read(fd, str, 125);
+// i = get_next_line(fd, &str);
+// printf("read = %d", i);
