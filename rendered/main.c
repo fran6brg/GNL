@@ -26,7 +26,6 @@ int	main(int ac, char **av)
 	while (get_next_line(fd, &line) == 1)
 	{
 			i++;
-	  	//printf("--------\nline = -%s-\n--------\n", line);
 	  	printf("\n************************\nmain : -%s-\n************************\n", line);
 	  	//printf("%s", line);
 	  	free(line);
