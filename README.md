@@ -1,3 +1,3 @@
 # GNL
 
-Synchro repo
+42 synchro repo
