@@ -1,0 +1,79 @@
+
+a.out:	file format Mach-O 64-bit x86-64
+
+Disassembly of section __TEXT,__text:
+__text:
+100000f40:	55 	pushq	%rbp
+100000f41:	48 89 e5 	movq	%rsp, %rbp
+100000f44:	48 83 ec 10 	subq	$16, %rsp
+100000f48:	48 8d 3d 5d 00 00 00 	leaq	93(%rip), %rdi
+100000f4f:	c7 45 fc 00 00 00 00 	movl	$0, -4(%rbp)
+100000f56:	e8 15 00 00 00 	callq	21 <_ft_strlen>
+100000f5b:	31 c9 	xorl	%ecx, %ecx
+100000f5d:	48 89 45 f0 	movq	%rax, -16(%rbp)
+100000f61:	89 c8 	movl	%ecx, %eax
+100000f63:	48 83 c4 10 	addq	$16, %rsp
+100000f67:	5d 	popq	%rbp
+100000f68:	c3 	retq
+100000f69:	90 	nop
+100000f6a:	90 	nop
+100000f6b:	90 	nop
+100000f6c:	90 	nop
+100000f6d:	90 	nop
+100000f6e:	90 	nop
+100000f6f:	90 	nop
+100000f70:	55 	pushq	%rbp
+100000f71:	48 89 e5 	movq	%rsp, %rbp
+100000f74:	48 89 7d f8 	movq	%rdi, -8(%rbp)
+100000f78:	48 c7 45 f0 ff ff ff ff 	movq	$-1, -16(%rbp)
+100000f80:	48 8b 45 f8 	movq	-8(%rbp), %rax
+100000f84:	48 8b 4d f0 	movq	-16(%rbp), %rcx
+100000f88:	48 89 ca 	movq	%rcx, %rdx
+100000f8b:	48 83 c2 01 	addq	$1, %rdx
+100000f8f:	48 89 55 f0 	movq	%rdx, -16(%rbp)
+100000f93:	0f be 74 08 01 	movsbl	1(%rax,%rcx), %esi
+100000f98:	83 fe 00 	cmpl	$0, %esi
+100000f9b:	0f 84 05 00 00 00 	je	5 <_ft_strlen+0x36>
+100000fa1:	e9 da ff ff ff 	jmp	-38 <_ft_strlen+0x10>
+100000fa6:	48 8b 45 f0 	movq	-16(%rbp), %rax
+100000faa:	5d 	popq	%rbp
+100000fab:	c3 	retq
+
+_main:
+100000f40:	55 	pushq	%rbp
+100000f41:	48 89 e5 	movq	%rsp, %rbp
+100000f44:	48 83 ec 10 	subq	$16, %rsp
+100000f48:	48 8d 3d 5d 00 00 00 	leaq	93(%rip), %rdi
+100000f4f:	c7 45 fc 00 00 00 00 	movl	$0, -4(%rbp)
+100000f56:	e8 15 00 00 00 	callq	21 <_ft_strlen>
+100000f5b:	31 c9 	xorl	%ecx, %ecx
+100000f5d:	48 89 45 f0 	movq	%rax, -16(%rbp)
+100000f61:	89 c8 	movl	%ecx, %eax
+100000f63:	48 83 c4 10 	addq	$16, %rsp
+100000f67:	5d 	popq	%rbp
+100000f68:	c3 	retq
+100000f69:	90 	nop
+100000f6a:	90 	nop
+100000f6b:	90 	nop
+100000f6c:	90 	nop
+100000f6d:	90 	nop
+100000f6e:	90 	nop
+100000f6f:	90 	nop
+
+_ft_strlen:
+100000f70:	55 	pushq	%rbp
+100000f71:	48 89 e5 	movq	%rsp, %rbp
+100000f74:	48 89 7d f8 	movq	%rdi, -8(%rbp)
+100000f78:	48 c7 45 f0 ff ff ff ff 	movq	$-1, -16(%rbp)
+100000f80:	48 8b 45 f8 	movq	-8(%rbp), %rax
+100000f84:	48 8b 4d f0 	movq	-16(%rbp), %rcx
+100000f88:	48 89 ca 	movq	%rcx, %rdx
+100000f8b:	48 83 c2 01 	addq	$1, %rdx
+100000f8f:	48 89 55 f0 	movq	%rdx, -16(%rbp)
+100000f93:	0f be 74 08 01 	movsbl	1(%rax,%rcx), %esi
+100000f98:	83 fe 00 	cmpl	$0, %esi
+100000f9b:	0f 84 05 00 00 00 	je	5 <_ft_strlen+0x36>
+100000fa1:	e9 da ff ff ff 	jmp	-38 <_ft_strlen+0x10>
+100000fa6:	48 8b 45 f0 	movq	-16(%rbp), %rax
+100000faa:	5d 	popq	%rbp
+100000fab:	c3 	retq
