@@ -3,50 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: amalsago <amalsago@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/21 23:40:59 by fberger           #+#    #+#             */
-/*   Updated: 2018/11/21 23:46:43 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/19 08:59:03 by amalsago          #+#    #+#             */
+/*   Updated: 2018/11/22 19:37:15 by amalsago         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
-static int	count_index(int n)
+char	*ft_itoa(int n)
 {
-	int		index;
+	long int	nbr;
+	size_t		len;
+	char		*str;
 
-	index = 0;
-	if (n < 0)
-	{
-		n *= -1;
-		index++;
-	}
-	while (++index && n >= 10)
-		n /= 10;
-	return (index);
-}
-
-char		*ft_itoa(int n)
-{
-	char	*str;
-	int		index;
-
-	index = count_index(n);
-	if (!(str = malloc(sizeof(char) * index + 1)))
+	nbr = n;
+	len = ft_nofdig(nbr);
+	if (!(str = ft_strnew(nbr < 0 ? ++len : len)))
 		return (NULL);
-	str[index--] = '\0';
-	if (index == 0 && n == 0 && (str[index] = '0'))
-		return (str);
-	if (n == -2147483648 && ft_strcpy(str, "-2147483648"))
-		return (str);
-	while (index >= 0)
+	if (nbr == 0)
+		str[len - 1] = nbr + '0';
+	if (nbr < 0)
 	{
-		if (n == 0)
-			str[index--] = '-';
-		else
-			str[index--] = (((n > 0) ? n : (n *= -1)) % 10) + 48;
-		n /= 10;
+		str[0] = '-';
+		nbr *= -1;
+	}
+	while (nbr != 0)
+	{
+		str[--len] = (nbr % 10) + '0';
+		nbr /= 10;
 	}
 	return (str);
 }

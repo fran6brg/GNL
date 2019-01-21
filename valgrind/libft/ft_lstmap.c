@@ -3,38 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: amalsago <amalsago@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/16 21:48:51 by fberger           #+#    #+#             */
-/*   Updated: 2018/11/16 21:49:49 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/21 18:18:56 by amalsago          #+#    #+#             */
+/*   Updated: 2018/11/22 16:09:56 by amalsago         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
 t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
 {
-	t_list	*element;
-	t_list	*new_element;
-	t_list	*broker;
-	t_list	*new;
+	t_list	*newlst;
+	t_list	**tmp;
 
-	element = lst;
-	if (element)
-	{
-		broker = f(element);
-		new_element = ft_lstnew(broker->content, broker->content_size);
-		new = new_element;
-	}
-	else
+	newlst = NULL;
+	tmp = &newlst;
+	if (!lst || !f)
 		return (NULL);
-	element = element->next;
-	while (element)
+	while (lst)
 	{
-		broker = f(element);
-		new_element->next = ft_lstnew(broker->content, broker->content_size);
-		element = element->next;
-		new_element = new_element->next;
+		*tmp = ft_lstnew(f(lst)->content, f(lst)->content_size);
+		tmp = &(*tmp)->next;
+		lst = lst->next;
 	}
-	return (new);
+	return (newlst);
 }

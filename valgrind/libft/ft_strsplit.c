@@ -3,72 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: amalsago <amalsago@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/13 19:25:38 by fberger           #+#    #+#             */
-/*   Updated: 2018/11/17 06:53:18 by fberger          ###   ########.fr       */
+/*   Created: 2018/11/20 08:02:34 by amalsago          #+#    #+#             */
+/*   Updated: 2018/11/22 21:06:18 by amalsago         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "includes/libft.h"
 
-static int	count_str(char const *s, char c)
+static int		ft_wordlen(char const *s, char c)
 {
-	int		i;
-	int		flag;
-	int		nb_str;
+	unsigned int	i;
 
-	i = -1;
-	flag = 0;
-	nb_str = 0;
-	while (s[++i])
-	{
-		if (s[i] != c && flag == 0)
-		{
-			nb_str++;
-			flag = 1;
-		}
-		if (s[i] == c && flag == 1)
-			flag = 0;
-	}
-	return (nb_str);
-}
-
-static int	str_len(char const *s, char c)
-{
-	int		i;
-
-	i = -1;
-	while (s[++i] != c && s[i] != '\0')
-		;
+	i = 0;
+	while (s[i] != '\0' && !(ft_isseparator(s[i], c)))
+		i++;
 	return (i);
 }
 
-char		**ft_strsplit(char const *s, char c)
+static char		*ft_storeword(char const *s, char c)
 {
-	char	**strs;
-	int		i;
-	int		str;
-	int		len;
+	unsigned int	i;
+	char			*tmp;
 
-	if (!s || (strs = malloc(sizeof(char **) * (count_str(s, c) + 1))) == NULL)
-		return ((char **)NULL);
-	i = -1;
-	str = 0;
-	while (s[++i])
+	i = 0;
+	if (!(tmp = ft_strnew(ft_wordlen(s, c))))
+		return (NULL);
+	i = 0;
+	while (s[i] != '\0' && !(ft_isseparator(s[i], c)))
 	{
-		if (s[i] != c && str < count_str(s, c))
-		{
-			len = str_len(&s[i], c);
-			if ((strs[str] = malloc(sizeof(char) * len + 1)) == NULL)
-				return ((char **)NULL);
-			while (s[i] != c && s[i] != '\0')
-				*(strs[str])++ = s[i++];
-			*(strs[str]) = '\0';
-			strs[str] = (&(*strs[str]) - len);
-			str++;
-		}
+		tmp[i] = s[i];
+		i++;
 	}
-	strs[str] = 0;
-	return (strs);
+	return (tmp);
+}
+
+char			**ft_strsplit(char const *s, char c)
+{
+	unsigned int	words;
+	unsigned int	nofword;
+	char			**tab;
+
+	if (!s)
+		return (NULL);
+	nofword = 0;
+	words = ft_cntwords(s, c);
+	if (!(tab = ft_strnew2d(words)))
+		return (NULL);
+	while (*s != '\0')
+	{
+		if (!(ft_isseparator(*s, c)))
+		{
+			if (!(tab[nofword] = ft_storeword(s, c)))
+				return (NULL);
+			nofword++;
+			while (*s != '\0' && !ft_isseparator(*s, c))
+				s++;
+		}
+		else
+			s++;
+	}
+	tab[nofword] = 0;
+	return (tab);
 }
