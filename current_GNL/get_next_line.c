@@ -17,7 +17,7 @@ int					reach_nl_eof(int fd, char **str, char **buf)
 {
 	int				ret;
 	int				i;
-	char			*ptr; // pourquoi ??
+	char			*ptr; // ?
 
 	i = 0;
 	while ((ret = read(fd, *buf, BUFF_SIZE)) > 0)
@@ -27,11 +27,9 @@ int					reach_nl_eof(int fd, char **str, char **buf)
 		if (*str)
 		 		*str = ft_strjoin(*str, *buf);
 		else
-		 		*str = ft_strdup(*buf);
+				*str = ft_strdup(*buf);
 		if (i >= 1)
-		{
-				ft_strdel((void *)&ptr);
-		}
+				ft_strdel((void *)&ptr); // ?
 		i++;
 		if (ft_strchr(*str, '\n'))
 		{
@@ -78,9 +76,9 @@ int					get_next_line(int fd, char **line)
 	int				ret2;
 
 	if (!line || fd < 0 || !(buf = (char *)ft_memalloc(BUFF_SIZE + 1)))
-		return (-1);
+			return (-1);
 	if ((ret1 = reach_nl_eof(fd, &str[fd], &buf) == -1))
-		return (-1);
+			return (-1);
 	ret2 = cp_str_in_line(line, &str[fd], &ret1);
 	return (ret2);
 }
