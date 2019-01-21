@@ -22,22 +22,43 @@ int					reach_nl_eof(int fd, char **str, char **buf)
 	i = 0;
 	while ((ret = read(fd, *buf, BUFF_SIZE)) > 0)
 	{
-		ptr = *buf;
-		ptr[ret] = '\0';
+		//ptr = *buf;
+		//ptr[ret] = '\0';
+		*(buf + ret) = (char)'\0';
 		ptr = *str;
-		*str = (*str ? ft_strjoin(*str, *buf) : ft_strdup(*buf));
+		if (*str)
+		 		*str = ft_strjoin(*str, *buf);
+		else
+		 		*str = ft_strdup(*buf);
 		if (i >= 1 && ptr)
-			ft_memdel((void *)&ptr);
-		++i;
+				ft_memdel((void *)&ptr);
+		i++;
 		if (ft_strchr(*str, '\n'))
 		{
 			ft_memdel((void *)buf);
 			return (ret);
 		}
+		//ft_memdel((void *)buf);
 	}
-	ft_memdel((void *)buf);
+	if (*buf)
+		ft_memdel((void *)buf);
+	if (i == 0 && ret == 0 && !*str)
+			return (-1);
 	return (ret);
 }
+
+// fonction pour str
+/*void clean_str(char **str)
+{
+	int i = -1;
+
+	while (1 < 10000)
+	{
+		if (str[i])
+			ft_strclr(str[i]);
+	}
+	//ft_memdel((void**)str);
+}*/
 
 int					cp_str_in_line(char **line, char **str, int *ret1)
 {
@@ -55,10 +76,13 @@ int					cp_str_in_line(char **line, char **str, int *ret1)
 	}
 	else if (!(*line = ft_strsub(ptr, 0, i)))
 		return (-1);
+	//if (ptr)
+	//			ft_memdel((void *)&ptr);
 	if (!ft_strlen(*str) && *ret1 == 0)
 		return (0);
 	if (i >= (int)ft_strlen(*str))
-		ft_strclr(*str);
+			ft_strclr(*str); // ft_strclr
+	//clean_str(str);
 	else
 		*str += (i + 1);
 	return (1);
@@ -73,7 +97,7 @@ int					get_next_line(int fd, char **line)
 
 	if (!line || fd < 0 || !(buf = (char *)ft_memalloc(BUFF_SIZE + 1)))
 		return (-1);
-	if ((ret1 = reach_nl_eof(fd, &str[fd], &buf)) == -1)
+	if ((ret1 = reach_nl_eof(fd, &str[fd], &buf) == -1))
 		return (-1);
 	ret2 = cp_str_in_line(line, &str[fd], &ret1);
 	return (ret2);
