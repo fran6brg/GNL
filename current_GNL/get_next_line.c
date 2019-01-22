@@ -13,72 +13,44 @@
 #include "get_next_line.h"
 #include <stdio.h>
 
-int					reach_nl_eof(int fd, char **str, char **buf)
+static int			cp_str_nl_to_line(char **str, char **line)
 {
-	int				ret;
-	int				i;
-	char			*ptr; // ?
+	int				index;
 
-	i = 0;
-	while ((ret = read(fd, *buf, BUFF_SIZE)) > 0)
-	{
-		(*buf)[ret] = '\0';
-		ptr = *str;
-		if (*str)
-		 		*str = ft_strjoin(*str, *buf);
-		else
-				*str = ft_strdup(*buf);
-		if (i >= 1)
-				ft_strdel((void *)&ptr); // ?
-		i++;
-		if (ft_strchr(*str, '\n'))
-		{
-			ft_memdel((void *)buf);
-			return (ret);
-		}
-	}
-	ft_memdel((void *)buf);
-	if (i == 0 && ret == 0 && !*str)
-			return (-1);
-	return (ret);
-}
-
-int					cp_str_in_line(char **line, char **str, int *ret1)
-{
-	int				i;
-	char			*ptr;
-
-	ptr = *str;
-	i = 0;
-	while (ptr[i] != '\0' && ptr[i] != '\n')
-		i++;
-	if (i == 0 || ptr[0] == '\0')
-	{
-		if (!(*line = ft_strnew(0))) // auparavant = ft_strdup("")))
-				return (-1);
-	}
-	else if (!(*line = ft_strsub(ptr, 0, i)))
+	index = 0;
+	while ((*str)[index] != '\0' && (*str)[index] != '\n')
+		index++;
+	if (!(*line = ft_strsub(*str, 0, index)))
 		return (-1);
-	if (!ft_strlen(*str) && *ret1 == 0)
-		return (0);
-	if (i >= (int)ft_strlen(*str))
-			ft_strclr(*str); // ne pas changer car bloque le multi
+	if ((*str)[index] != '\0')
+		*str = ft_strcpy(*str, (*str + index) + 1);
 	else
-		*str += (i + 1);
+		ft_strdel(str);
 	return (1);
 }
 
-int					get_next_line(int fd, char **line)
+int					get_next_line(const int fd, char **line)
 {
-	static char		*str[10000] = {NULL};
-	int				ret1;
-	char			*buf;
-	int				ret2;
+	int				ret;
+	char			buff[BUFF_SIZE + 1];
+	char			*tmp;
+	static char		*str[10000];
 
-	if (!line || fd < 0 || !(buf = (char *)ft_memalloc(BUFF_SIZE + 1)))
+	if (fd < 0 || !line || (!str[fd] && !(str[fd] = ft_strnew(0))))
+		return (-1);
+
+	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	{
+		buff[ret] = '\0';
+		tmp = str[fd];
+		if (!(str[fd] = ft_strjoin(str[fd], buff)))
 			return (-1);
-	if ((ret1 = reach_nl_eof(fd, &str[fd], &buf) == -1))
-			return (-1);
-	ret2 = cp_str_in_line(line, &str[fd], &ret1);
-	return (ret2);
+		free(tmp);
+		if (ft_strchr(str[fd], '\n') != NULL)
+			break ;
+	}
+
+	if (ret <= 0 && !ft_strlen(str[fd]))
+		return (ret);
+	return (cp_str_nl_to_line(&str[fd], line));
 }
