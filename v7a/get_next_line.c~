@@ -6,7 +6,7 @@
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 23:45:15 by fberger           #+#    #+#             */
-/*   Updated: 2019/01/23 21:49:58 by fberger          ###   ########.fr       */
+/*   Updated: 2019/01/23 21:49:46 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int					get_next_line(const int fd, char **line)
 	char			*tmp;
 	static char		*str[10000];
 
-	if (fd < 0 || fd > 10000)
+	if (fd < 0) || fd > 10000)
 		return (-1);
 	if (!line || (!str[fd] && !(str[fd] = ft_strnew(0))))
 		return (-1);

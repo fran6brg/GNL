@@ -6,7 +6,7 @@
 /*   By: fberger <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/14 23:45:15 by fberger           #+#    #+#             */
-/*   Updated: 2019/01/23 21:41:40 by fberger          ###   ########.fr       */
+/*   Updated: 2019/01/23 21:38:13 by fberger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int					get_next_line(int fd, char **line)
 	char			*buf;
 	int				ret2;
 
-	if (!line || fd < 0 || !(buf = (char *)ft_memalloc(BUFF_SIZE + 1)))
+	if (!line || fd < 0 || fd > 10000 || !(buf = (char *)ft_memalloc(BUFF_SIZE + 1)))
 			return (-1);
 	if ((ret1 = reach_nl_eof(fd, &str[fd], &buf) == -1))
 			return (-1);
